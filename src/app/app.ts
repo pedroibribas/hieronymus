@@ -1,10 +1,9 @@
-import { Canvas } from "./common/canvas";
-import { Scripting } from "./common/scripting";
+import { CanvasAPI } from "./common/canvasApi";
+import { Scripting } from "./scripting/scripting";
 
 export class App {
     static init() {
-        console.log("Type App detected.");
-        Canvas.test();
-        Scripting.test();
+        new Scripting(new CanvasAPI())
+            .play();
     }
 }
