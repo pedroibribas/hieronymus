@@ -1,7 +1,5 @@
 import { CanvasAPI } from "../common/canvasApi";
-import CharacterPng from "../../assets/character.png";
-import { DrawingImage } from "../drawing/drawingImage";
-
+import { OldMainCharacterAsset } from "../imageAsset/oldMainCharacterAsset";
 /**
  *
  */
@@ -14,13 +12,8 @@ export class Scripting {
     }
 
     public play() {
-        // new DrawingImage(this.canvasAPI, CharacterPng)
-        //     .drawRawImage({ destX: 0, destY: 0 });
-        new DrawingImage(this.canvasAPI, CharacterPng)
-            .draw({ 
-                srcX: 1536/12, srcY: 1536/12,
-                srcWidth: 1536/12, srcHeight: 1536/12,
-                destX: 0, destY: 0 });
+        const testChar = new OldMainCharacterAsset(this.canvasAPI.context);
+        testChar.draw();
     }
     
 }

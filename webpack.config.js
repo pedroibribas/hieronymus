@@ -9,15 +9,15 @@ module.exports = {
       path: path.resolve(__dirname, 'dist'),
       clean: true
     },
-    watch: true,
+    // watch: true,
     devtool: 'inline-source-map',
     resolve: {
       extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
     },
     // A server.
-    devServer: {
-      static: "./dist"
-    },
+    // devServer: {
+    //   static: "dist"
+    // },
     module: {
       rules: [
         // TypeScript.
@@ -42,7 +42,7 @@ module.exports = {
     plugins: [
         // Generate ./dist/index.html
         new HtmlWebpackPlugin({
-          title: "Development"
+          title: "Hieronymus"
         })
     ]
   };
