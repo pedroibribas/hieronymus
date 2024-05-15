@@ -1,26 +1,22 @@
 import { IDrawImageOnCanvasDTO } from "../models/drawImageOnCanvasDto";
+import { ImageService } from "./imageService";
 
 export class DrawingTool {
 
     private readonly canvasContext: CanvasRenderingContext2D;
-    private readonly imageElement: HTMLImageElement;
 
-    constructor(
-        canvasContext: CanvasRenderingContext2D,
-        imageElement: HTMLImageElement
-    ) {
+    constructor(canvasContext: CanvasRenderingContext2D) {
         this.canvasContext = canvasContext;
-        this.imageElement = imageElement;
     }
 
-    public draw(data: IDrawImageOnCanvasDTO) {
-        this.imageElement.addEventListener("load", () => {
+    public draw(dto: IDrawImageOnCanvasDTO) {
+        ImageService.setOnLoad(dto.imageElement, () => {
             this.canvasContext.drawImage(
-                this.imageElement,
-                data.srcX, data.srcY,
-                data.srcWidth, data.srcHeight,
-                data.destX, data.destY,
-                data.srcWidth, data.srcHeight,
+                dto.imageElement,
+                dto.srcX, dto.srcY,
+                dto.srcWidth, dto.srcHeight,
+                dto.destX, dto.destY,
+                dto.srcWidth, dto.srcHeight,
             );
         });
     }

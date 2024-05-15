@@ -1,4 +1,4 @@
-import { CreateImageDto } from "../models/CreateImageDto";
+import { CreateImageDto } from "../models/createImageDto";
 
 /**
  * Initializes and provides HTMLImageElement properties.
