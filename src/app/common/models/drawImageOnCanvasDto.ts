@@ -1,0 +1,1 @@
+export interface IDrawImageOnCanvasDTO { srcX: number, srcY: number, srcWidth: number, srcHeight: number, destX: number, destY: number }

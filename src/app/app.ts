@@ -1,9 +1,10 @@
-import { CanvasAPI } from "./common/canvasApi";
-import { Scripting } from "./scripting/scripting";
+import { CanvasService } from "./common/modules/canvasService";
+import { Storyline } from "./story/storyline";
 
 export class App {
     static init() {
-        new Scripting(new CanvasAPI())
+        new Storyline(
+            new CanvasService({ width: "400", height: "400" }))
             .play();
     }
 }
