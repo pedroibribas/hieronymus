@@ -1,4 +1,11 @@
 export enum SpriteState {
     Idle,
-    WalkingRight
+    IdleUp,
+    IdleDown,
+    IdleRight,
+    IdleLeft,
+    WalkingUp,
+    WalkingDown,
+    WalkingRight,
+    WalkingLeft
 };
