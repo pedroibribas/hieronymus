@@ -12,8 +12,9 @@ export class OldManHeroSprite {
     private readonly asset: AssetManagement;
     private readonly imageElement: HTMLImageElement;
     private currentSpriteState: SpriteState;
+    private frameCounter: number;
 
-    constructor(canvasContext: CanvasRenderingContext2D) {
+    constructor(drawingTool: DrawingTool) {
         this.asset = new AssetManagement({
             imageSrc: CharacterPng,
             imageWidth: 1536,
@@ -28,35 +29,34 @@ export class OldManHeroSprite {
             imageElementId: this.asset.imageId,
             imageElementSrc: this.asset.imageSrc
         });
-        this.drawingTool = new DrawingTool(canvasContext);
+        this.drawingTool = drawingTool;
+
+        window.requestAnimationFrame(() => this.handleState);
+        this.frameCounter = 0;
     }
 
     public draw() {
-        this.drawingTool.draw({
-            imageElement: this.imageElement,
-            srcX: 1536 / 12,
-            srcY: 1536 / 12,
-            srcWidth: this.asset.spriteWidth,
-            srcHeight: this.asset.spriteWidth,
-            destX: 100,
-            destY: 0
-        });
         this.currentSpriteState = SpriteState.Idle;
         const spriteState = this.asset.states.find((s) => s.state === this.currentSpriteState);
         this.handleState(spriteState);
     }
 
     private handleState(spriteState: ISpriteStateManagementDTO) {
-        for (let i = 0; i < spriteState.spritesAmount; i++) {
-            this.drawingTool.draw({
-                imageElement: this.imageElement,
-                srcX: spriteState.spritesPositions[i],
-                srcY: spriteState.yPosition,
-                srcWidth: this.asset.spriteWidth,
-                srcHeight: this.asset.spriteWidth,
-                destX: 0,
-                destY: 0
-            });
+        const maxFramesAmount: number = spriteState.spritesPositions.length;
+        this.drawingTool.drawFrame({
+            imageElement: this.imageElement,
+            srcX: spriteState.spritesPositions[this.frameCounter],
+            srcY: spriteState.yPosition,
+            srcWidth: this.asset.spriteWidth,
+            srcHeight: this.asset.spriteWidth,
+            destX: 50,
+            destY: 0,
+            spritePositions: spriteState.spritesPositions
+        });
+        this.frameCounter++;
+        if (this.frameCounter === maxFramesAmount) {
+            this.frameCounter = 0;
         }
+        window.requestAnimationFrame(()=>this.handleState);
     }
 }
