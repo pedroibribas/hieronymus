@@ -42,7 +42,7 @@ module.exports = {
     plugins: [
         // Generate ./dist/index.html
         new HtmlWebpackPlugin({
-          title: "Development"
+          title: "Hieronymus"
         })
     ]
   };

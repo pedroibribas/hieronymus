@@ -1,20 +1,26 @@
 import { DrawingTool } from "../common/modules/drawingTool";
 import { ImageService } from "../common/modules/imageService";
-
-import CharacterPng from "../../assets/character.png";
 import { SpriteState } from "../common/models/spriteState";
 import { AssetManagement } from "./assetManagement";
-import { ISpriteStateManagementDTO } from "./spriteStateManagementDTO";
+import CharacterPng from "../../assets/character.png";
 
 export class OldManHeroSprite {
 
-    private readonly drawingTool: DrawingTool;
+    private readonly brush: DrawingTool;
     private readonly asset: AssetManagement;
     private readonly imageElement: HTMLImageElement;
     private currentSpriteState: SpriteState;
-    private frameCounter: number;
 
-    constructor(drawingTool: DrawingTool) {
+    private xSpriteCounter: number;
+    private drawingSpeed: number;
+    private frameCounter: number;
+    
+    constructor(brush: DrawingTool) {
+        this.brush = brush;
+        this.frameCounter = 0;
+        this.xSpriteCounter = 0;
+        this.drawingSpeed = 7;
+
         this.asset = new AssetManagement({
             imageSrc: CharacterPng,
             imageWidth: 1536,
@@ -25,38 +31,36 @@ export class OldManHeroSprite {
                 spritesAmount: 6
             }]
         });
+
         this.imageElement = ImageService.createImage({
             imageElementId: this.asset.imageId,
             imageElementSrc: this.asset.imageSrc
         });
-        this.drawingTool = drawingTool;
-
-        window.requestAnimationFrame(() => this.handleState);
-        this.frameCounter = 0;
     }
 
-    public draw() {
+    public draw(dto: { atX: number, atY: number }) {
         this.currentSpriteState = SpriteState.Idle;
-        const spriteState = this.asset.states.find((s) => s.state === this.currentSpriteState);
-        this.handleState(spriteState);
-    }
 
-    private handleState(spriteState: ISpriteStateManagementDTO) {
-        const maxFramesAmount: number = spriteState.spritesPositions.length;
-        this.drawingTool.drawFrame({
-            imageElement: this.imageElement,
-            srcX: spriteState.spritesPositions[this.frameCounter],
-            srcY: spriteState.yPosition,
-            srcWidth: this.asset.spriteWidth,
-            srcHeight: this.asset.spriteWidth,
-            destX: 50,
-            destY: 0,
-            spritePositions: spriteState.spritesPositions
-        });
-        this.frameCounter++;
-        if (this.frameCounter === maxFramesAmount) {
+        const spriteState = this.asset.states.find((s) => s.state === this.currentSpriteState);
+
+        this.brush.animate(() => {
+            this.frameCounter++;
+            if (this.frameCounter < this.drawingSpeed) return;
+
             this.frameCounter = 0;
-        }
-        window.requestAnimationFrame(()=>this.handleState);
+            this.brush.drawFrame({
+                img: this.imageElement,
+                srcX: spriteState.spritesPositions[this.xSpriteCounter],
+                srcY: spriteState.yPosition,
+                srcW: this.asset.spriteWidth,
+                srcH: this.asset.spriteWidth,
+                destX: dto.atX,
+                destY: dto.atY,
+                scale: 3
+            });
+
+            this.xSpriteCounter++;
+            if (this.xSpriteCounter === 6) this.xSpriteCounter = 0;
+        });
     }
 }

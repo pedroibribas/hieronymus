@@ -1,1 +1,0 @@
-export interface ICanvasDimensions { width: string, height: string }

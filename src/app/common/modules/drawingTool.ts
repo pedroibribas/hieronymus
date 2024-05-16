@@ -1,5 +1,4 @@
 import { IDrawImageOnCanvasDTO } from "../models/drawImageOnCanvasDto";
-import { ImageService } from "./imageService";
 
 export class DrawingTool {
 
@@ -11,37 +10,20 @@ export class DrawingTool {
         this.canvasContext = canvasContext;
     }
 
-    public draw(dto: IDrawImageOnCanvasDTO) {
-        ImageService.setOnLoad(dto.imageElement, () => {
-            this.canvasContext.drawImage(
-                dto.imageElement,
-                dto.srcX, dto.srcY,
-                dto.srcWidth, dto.srcHeight,
-                dto.destX, dto.destY,
-                dto.srcWidth, dto.srcHeight,
-            );
-        });
-    }
-
     public drawFrame(dto: IDrawImageOnCanvasDTO) {
-        this.clearCanvas();
-        ImageService.setOnLoad(dto.imageElement, () => {
-            this.canvasContext.drawImage(
-                dto.imageElement,
-                dto.srcX,
-                dto.srcY,
-                dto.srcWidth, dto.srcHeight,
-                dto.destX, dto.destY,
-                dto.srcWidth, dto.srcHeight
-            );
-        });
+        this.canvasContext.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+        this.canvasContext.drawImage(
+            dto.img,
+            dto.srcX, dto.srcY, dto.srcW, dto.srcH,
+            dto.destX, dto.destY, dto.srcW * dto.scale, dto.srcH * dto.scale,
+        );
     }
 
-    private clearCanvas() {
-        this.canvasContext.clearRect(
-            0,
-            0,
-            this.canvasElement.width,
-            this.canvasElement.height);
+    public animate(action: () => void) {
+        function handler() {
+            action();
+            window.requestAnimationFrame(handler);
+        };
+        window.requestAnimationFrame(handler);
     }
 }

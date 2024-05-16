@@ -1,22 +1,15 @@
-import { CanvasService } from "../common/modules/canvasService";
 import { DrawingTool } from "../common/modules/drawingTool";
 import { OldManHeroSprite } from "../sprites/oldManHeroSprite";
 
 export class Storyline {
-
-    private readonly canvasService: CanvasService;
-    private readonly drawingTool: DrawingTool;
-
-    constructor(canvasService: CanvasService) {
-        this.canvasService = canvasService;
-        this.drawingTool = new DrawingTool(
-            canvasService.element,
-            canvasService.context);
+    public static play(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+        const brush = new DrawingTool(canvas, context);
+        TestMap.init(brush);
     }
+}
 
-    public play() {
-        const sprite = new OldManHeroSprite(this.drawingTool);
-        sprite.draw();
+export class TestMap {
+    static init( brush: DrawingTool) {
+        new OldManHeroSprite(brush).draw({ atX:0, atY: 0});
     }
-    
 }

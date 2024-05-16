@@ -1,10 +1,10 @@
 export interface IDrawImageOnCanvasDTO {
-    imageElement: HTMLImageElement,
-    srcX?: number,
+    img: HTMLImageElement,
+    srcX: number,
     srcY: number,
-    srcWidth: number,
-    srcHeight: number,
+    srcW: number,
+    srcH: number,
     destX: number,
     destY: number,
-    spritePositions?: number[]
+    scale: number
 }
