@@ -5,7 +5,8 @@ export interface IAssetManagementDTO {
     imageSrc: string,
     imageWidth: number,
     imageHeight: number,
-    maxSpritesAmount: number
+    imageColsCount: number;
+    imageRowsCount: number;
     states: ISpriteStateManagementDTO[];
 }
 
@@ -24,38 +25,38 @@ export class AssetManagement {
         this.imageSrc = dto.imageSrc;
         this.imageWidth = dto.imageWidth;
         this.imageHeight = dto.imageHeight;
-        this.maxSpritesAmount = dto.maxSpritesAmount;
-        this.spriteWidth = this.calcSpriteWidth(dto.imageWidth, dto.maxSpritesAmount);
-        this.spriteHeight = this.calcSpriteHeight(dto.imageHeight, dto.states);
+        this.maxSpritesAmount = dto.imageColsCount;
+        this.spriteWidth = this.calcSpriteWidth(dto.imageWidth, dto.imageColsCount);
+        this.spriteHeight = this.calcSpriteHeight(dto.imageHeight, dto.imageRowsCount);
         this.states = this.mapStates(dto);
     }
 
-    private calcSpriteWidth(imageWidth: number, maxSpritesAmount: number): number {
-        return imageWidth/maxSpritesAmount;
+    private calcSpriteWidth(imageWidth: number, imageColsCount: number): number {
+        return imageWidth / imageColsCount;
     }
-    private calcSpriteHeight(imageHeight: number, imageStates: SpriteStateDto[]): number {
-        return imageHeight/imageStates.length;
+    private calcSpriteHeight(imageHeight: number, imageRowsCount: number): number {
+        return imageHeight / imageRowsCount;
     }
+
     private mapStates(dto: IAssetManagementDTO): ISpriteStateManagementDTO[] {
-        let spriteStates = [] as ISpriteStateManagementDTO[];
-        let spritesPositionsMultiplier = 0;
-        let yPositionMultiplier = 0;
-
-        dto.states.forEach((state) => {
-            const spritesPositions = [];
-            for (let i = 0; i < state.spritesAmount; i++) {
-                spritesPositions.push(this.spriteWidth * spritesPositionsMultiplier);
-                spritesPositionsMultiplier++;
+        const rows = [] as ISpriteStateManagementDTO[];
+        let heightMultiplier = 0;
+        dto.states.forEach((row) => {
+            const colsPositions = [];
+            let widthMultiplier = 0;
+            for (let i = 0; i < row.colsCount; i++) {
+                colsPositions.push(this.spriteWidth * widthMultiplier);
+                widthMultiplier++;
             }
-            state.spritesPositions = spritesPositions;
+            row.colsPositions = colsPositions;
 
-            state.yPosition = this.spriteHeight * yPositionMultiplier;
-            yPositionMultiplier++
+            row.yPosition = this.spriteHeight * heightMultiplier;
+            heightMultiplier++
 
-            spriteStates.push(state);
+            rows.push(row);
         });
 
-        return spriteStates;
+        return rows;
     }
 
 }

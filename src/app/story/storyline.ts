@@ -1,5 +1,5 @@
 import { DrawingTool } from "../common/modules/drawingTool";
-import { OldManHeroSprite } from "../sprites/oldManHeroSprite";
+import { TestMap } from "./testMap";
 
 export class Storyline {
     public static play(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
@@ -8,8 +8,3 @@ export class Storyline {
     }
 }
 
-export class TestMap {
-    static init( brush: DrawingTool) {
-        new OldManHeroSprite(brush).draw({ atX:0, atY: 0});
-    }
-}

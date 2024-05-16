@@ -11,4 +11,8 @@ export class CanvasService {
         return canvas;
     }
 
+    public static getCanvasById(id: string): HTMLCanvasElement {
+        return document.getElementById(id) as HTMLCanvasElement;
+    }
+
 }

@@ -12,6 +12,8 @@ export class DrawingTool {
 
     public drawFrame(dto: IDrawImageOnCanvasDTO) {
         this.canvasContext.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
+        // this.canvasContext.direction = "rtl";
+        // this.canvasContext.rotate(180);
         this.canvasContext.drawImage(
             dto.img,
             dto.srcX, dto.srcY, dto.srcW, dto.srcH,

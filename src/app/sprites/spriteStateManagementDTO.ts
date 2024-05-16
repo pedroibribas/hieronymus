@@ -2,7 +2,7 @@ import { SpriteState } from "../common/models/spriteState";
 
 export interface ISpriteStateManagementDTO {
     state: SpriteState;
-    spritesAmount: number;
+    colsCount: number;
     yPosition?: number;
-    spritesPositions?: number[];
+    colsPositions?: number[];
 }
