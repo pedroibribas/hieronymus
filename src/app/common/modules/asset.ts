@@ -58,14 +58,13 @@ export abstract class Asset {
             };
         }, false);
         window.addEventListener("keyup", (event) => {
-            event.preventDefault();
             if (event.code in this.isPressed) {
                 this.isPressed[event.code] = false;
                 console.log(event.code);
                 if (event.code === GameKeys.KeyW) this.setCurrentSpriteState(ESpriteState.IdleUp);
-                else if (event.code === GameKeys.KeyD) this.setCurrentSpriteState(ESpriteState.IdleRight);
-                else if (event.code === GameKeys.KeyS) this.setCurrentSpriteState(ESpriteState.IdleDown);
-                else if (event.code === GameKeys.KeyA) this.setCurrentSpriteState(ESpriteState.IdleLeft);
+                if (event.code === GameKeys.KeyD) this.setCurrentSpriteState(ESpriteState.IdleRight);
+                if (event.code === GameKeys.KeyS) this.setCurrentSpriteState(ESpriteState.IdleDown);
+                if (event.code === GameKeys.KeyA) this.setCurrentSpriteState(ESpriteState.IdleLeft);
             }
         }, false);
     }
@@ -80,14 +79,15 @@ export abstract class Asset {
         this.brush.animate(() => {
 
             if (this.isPressed[GameKeys.KeyW]) this.move(0, -3, ESpriteState.WalkingUp);
-            else if (this.isPressed[GameKeys.KeyD]) this.move(3, 0, ESpriteState.WalkingRight);
-            else if (this.isPressed[GameKeys.KeyS]) this.move(0, 3, ESpriteState.WalkingDown);
-            else if (this.isPressed[GameKeys.KeyA]) this.move(-3, 0, ESpriteState.WalkingLeft);
+            if (this.isPressed[GameKeys.KeyD]) this.move(3, 0, ESpriteState.WalkingRight);
+            if (this.isPressed[GameKeys.KeyS]) this.move(0, 3, ESpriteState.WalkingDown);
+            if (this.isPressed[GameKeys.KeyA]) this.move(-3, 0, ESpriteState.WalkingLeft);
 
             this.frameCounter++;
             if (this.frameCounter < this.drawingSpeed) return;
             this.frameCounter = 0;
 
+            
             this.brush.clearCanvas();
             this.brush.drawFrame({
                 img: this.imageElement,
@@ -99,9 +99,9 @@ export abstract class Asset {
                 destY: this.destY,
                 scale: this.scale
             });
-
+            
             this.xColCounter++;
-            if (this.xColCounter === this.spriteState.srcX.length) {
+            if (this.xColCounter >= this.spriteState.srcX.length) {
                 this.xColCounter = 0;
             }
         });

@@ -15,7 +15,7 @@ export class DrawingTool {
             dto.img,
             dto.srcX, dto.srcY, dto.srcW, dto.srcH,
             dto.destX, dto.destY, dto.srcW * dto.scale, dto.srcH * dto.scale,
-        );
+        );        
     }
     public clearCanvas() {
         this.canvasContext.clearRect(0, 0, this.canvasElement.width, this.canvasElement.height);
