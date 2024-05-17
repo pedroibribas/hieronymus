@@ -5,6 +5,7 @@ import { ISpriteStateManagementDTO } from "../models/spriteStateManagementDTO";
 import { AssetManagement } from "./assetManagement";
 import { TRowDTO } from "../models/rowDTO";
 import { TImgMatrix } from "../models/imgMatrix";
+import { GameKeys } from "../models/gameKeys";
 
 export abstract class Asset {
     private readonly brush: DrawingTool;
@@ -15,11 +16,12 @@ export abstract class Asset {
     private drawingSpeedBase: number;
     private drawingSpeed: number;
     private frameCounter: number;
-    
     private spriteState: ISpriteStateManagementDTO;
     private destX: number;
     private destY: number;
     private scale: number;
+
+    private isPressed: { [key: string]: boolean };
 
     constructor(
         brush: DrawingTool,
@@ -42,7 +44,30 @@ export abstract class Asset {
         });
 
         this.setCurrentSpriteState(dto.initialState);
-        this.setSpriteActions();
+
+        this.isPressed = {
+            KeyW: false,
+            KeyD: false,
+            KeyS: false,
+            KeyA: false,
+        };
+
+        window.addEventListener("keydown", (event) => {
+            if (event.code in this.isPressed) {
+                this.isPressed[event.code] = true;
+            };
+        }, false);
+        window.addEventListener("keyup", (event) => {
+            event.preventDefault();
+            if (event.code in this.isPressed) {
+                this.isPressed[event.code] = false;
+                console.log(event.code);
+                if (event.code === GameKeys.KeyW) this.setCurrentSpriteState(ESpriteState.IdleUp);
+                else if (event.code === GameKeys.KeyD) this.setCurrentSpriteState(ESpriteState.IdleRight);
+                else if (event.code === GameKeys.KeyS) this.setCurrentSpriteState(ESpriteState.IdleDown);
+                else if (event.code === GameKeys.KeyA) this.setCurrentSpriteState(ESpriteState.IdleLeft);
+            }
+        }, false);
     }
 
     protected abstract setAsset(): AssetManagement;
@@ -53,10 +78,17 @@ export abstract class Asset {
 
     public draw() {
         this.brush.animate(() => {
+
+            if (this.isPressed[GameKeys.KeyW]) this.move(0, -3, ESpriteState.WalkingUp);
+            else if (this.isPressed[GameKeys.KeyD]) this.move(3, 0, ESpriteState.WalkingRight);
+            else if (this.isPressed[GameKeys.KeyS]) this.move(0, 3, ESpriteState.WalkingDown);
+            else if (this.isPressed[GameKeys.KeyA]) this.move(-3, 0, ESpriteState.WalkingLeft);
+
             this.frameCounter++;
             if (this.frameCounter < this.drawingSpeed) return;
             this.frameCounter = 0;
 
+            this.brush.clearCanvas();
             this.brush.drawFrame({
                 img: this.imageElement,
                 srcX: this.spriteState.srcX[this.xColCounter],
@@ -73,6 +105,12 @@ export abstract class Asset {
                 this.xColCounter = 0;
             }
         });
+    }
+
+    private move(onX: number, onY: number, state: ESpriteState) {
+        if (onX !== 0) this.destX += onX;
+        if (onY !== 0) this.destY += onY;
+        this.setCurrentSpriteState(state);
     }
 
     /**
@@ -102,52 +140,5 @@ export abstract class Asset {
         }
 
         return matrix;
-    }
-
-    private setSpriteActions() {
-        const ctl = {
-            moveUp: "w",
-            moveDown: "s",
-            moveRightKey: "d",
-            moveLeftKey: "a",
-        };
-        let lastPressedKey = "";
-
-        // document.addEventListener("keyup", () => {
-        //     if (lastPressedKey === ctl.moveUp) {
-        //         this.setCurrentSpriteState(ESpriteState.IdleUp);
-        //     }
-        //     if (lastPressedKey === ctl.moveRightKey) {
-        //         this.setCurrentSpriteState(ESpriteState.IdleRight);
-        //     }
-        //     if (lastPressedKey === ctl.moveDown) {
-        //         this.setCurrentSpriteState(ESpriteState.IdleDown);
-        //     }
-        //     if (lastPressedKey === ctl.moveLeftKey) {
-        //         this.setCurrentSpriteState(ESpriteState.IdleLeft);
-        //     }
-        // });
-
-        document.addEventListener("keydown", (event) => {
-            this.drawingSpeed = this.drawingSpeedBase * 0.75;
-            const distance = 3;
-            if (event.key === ctl.moveRightKey) {
-                lastPressedKey = ctl.moveRightKey;
-                this.destX += distance;
-                this.setCurrentSpriteState(ESpriteState.WalkingRight);
-            }
-            if (event.key === ctl.moveLeftKey) {
-                this.destX -= distance;
-                this.setCurrentSpriteState(ESpriteState.WalkingLeft);
-            }
-            if (event.key === ctl.moveUp) {
-                this.destY -= distance;
-                this.setCurrentSpriteState(ESpriteState.WalkingUp);
-            }
-            if (event.key === ctl.moveDown) {
-                this.destY += distance;
-                this.setCurrentSpriteState(ESpriteState.WalkingDown);
-            }
-        });
     }
 }
