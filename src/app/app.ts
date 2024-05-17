@@ -1,10 +1,10 @@
 import { CanvasService } from "./common/modules/canvasService";
-import { Storyline } from "./story/storyline";
+import { Storyline } from "./scenes/storyline";
 
 export class App {
 
     static init() {
-        document.body.style.backgroundColor = "#D6D6D6";
+        document.body.style.backgroundColor = "#D6D6";
         const width = 800;
         const dimensionsProportion = 0.7;
         const canvas = CanvasService.createCanvasElement(
@@ -14,7 +14,7 @@ export class App {
             [
                 { property: "display", value: "block" },
                 { property: "margin", value: "0 auto" },
-                { property: "backgroundColor", value: "#FFF" },
+                { property: "background-color", value: "#FFF" },
                 { property: "border", value: "5px solid #000" },
             ]
         );

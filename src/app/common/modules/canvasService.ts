@@ -15,4 +15,9 @@ export class CanvasService {
         return document.getElementById(id) as HTMLCanvasElement;
     }
 
+    public static getCanvasDimensionsById(id: string): { w: number, h: number } {
+        const canvas = document.getElementById(id) as HTMLCanvasElement;
+        return { w: canvas.width, h: canvas.height };
+    }
+
 }

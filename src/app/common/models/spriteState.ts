@@ -1,4 +1,4 @@
-export enum SpriteState {
+export enum ESpriteState {
     Idle,
     IdleUp,
     IdleDown,
