@@ -5,11 +5,11 @@ export class App {
 
     static init() {
         document.body.style.backgroundColor = "#D6D6";
-        const width = 800;
-        const dimensionsProportion = 0.7;
+        const width = 650;
+        const dimensionsProportion = 0.8;
         const canvas = CanvasService.createCanvasElement(
             `canvas_main`,
-            800,
+            width,
             width * dimensionsProportion,
             [
                 { property: "display", value: "block" },

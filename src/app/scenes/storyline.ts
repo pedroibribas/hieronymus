@@ -4,7 +4,7 @@ import { TestMap } from "./testMap";
 export class Storyline {
     public static play(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
         const brush = new DrawingTool(canvas, context);
-        new TestMap(brush).init();
+        new TestMap(brush).test_intro();
     }
 }
 
